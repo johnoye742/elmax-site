@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\AccountControl;
 use App\Models\AffiliateProduct;
 use App\Models\Product;
 use App\Models\Products;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -50,7 +53,7 @@ Route::get('/shop/{category}', function ($category) {
 });
 
 Route::get('/admin/add-product', function() {
-    
+
     return view('add-product');
 });
 
@@ -106,3 +109,20 @@ Route::get('/login', function() {
 Route::get('/sign-up', function () {
     return view('sign-up');
 }) -> name('sign-up');
+
+Route::post('/create-account', [AccountControl::class, 'createAccount'])
+-> name('create-account');
+
+Route::post('/login', function (Request $request) {
+    $data = $request -> validate([
+        'email' => 'email|required',
+        'password' => 'required'
+    ]);
+
+    if(Auth::attempt($data)) {
+        return 'success';
+    }
+
+    return 'failed xD';
+})
+-> name('enter-account');
