@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\AccountControl;
+use App\Http\Controllers\CartController;
 use App\Models\AffiliateProduct;
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Products;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -50,7 +53,7 @@ Route::get('/shop/{category}', function ($category) {
     }
 
     return '404';
-});
+}) -> middleware('auth');
 
 Route::get('/admin/add-product', function() {
 
@@ -63,8 +66,11 @@ Route::get('/show-data', function () {
 });
 
 Route::post('/admin/add-product', function (Request $request) {
+    $name = str_ireplace('-', ' ', $request -> name);
+    $name = str_ireplace('/', ' ', $name);
+
     $product = new Product([
-        'name' => $request -> name,
+        'name' => $name,
         'price' => $request -> price,
         'category' => $request-> category,
         'image' => $request -> cover,
@@ -126,3 +132,36 @@ Route::post('/login', function (Request $request) {
     return 'failed xD';
 })
 -> name('enter-account');
+
+Route::get('/cart', function () {
+    $username = Auth::user() -> email;
+    $cart = Cart::all() -> where('username', $username);
+    $products = Product::all();
+    Log::debug($cart);
+
+    return view('cart', ['cart' => $cart]);
+}) -> name('cart');
+
+
+Route::post('/cart/add', [CartController::class, 'addToCart'])
+-> name('add-item');
+
+Route::post('/cart/remove', [CartController::class, 'deleteFromCart'])
+-> name('delete-item');
+
+Route::get('/products/{id}', function ($id) {
+    $product = Product::find($id);
+    $image = $product -> image;
+    $images = [];
+    if(str_contains($image, '|')) {
+        $images = explode('|', $image);
+    } else {
+        $images = [$image];
+    }
+
+    return view('product-page', ['product' => $product, 'images' => $images]);
+}) -> name('product');
+
+Route::get('/truncate', function () {
+    return DB::table('cart') -> truncate();
+});

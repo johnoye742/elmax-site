@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Elmax Commerce</title>
-    
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
@@ -15,7 +15,7 @@
         <livewire:navbar :pos="1"></livewire:navbar>
     </header>
 
-    
+
 
     <main class="w-full">
         <div class="w-full lg:px-8 px-3">
@@ -28,19 +28,20 @@
                 </div>
             </div>
         </div>
+
         <div class="flex flex-col px-8 py-5">
             <h1 class="text-2xl">Explore Categories</h1>
             <div class="w-full grid lg:grid-cols-4 grid-cols-1 py-4 gap-4">
                 <div class="rounded-lg p-[5em] text-white flex flex-col items-center !bg-cover !bg-blend-overlay" style="background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') #00000060;">
                     <div class="rounded-full bg-yellow-500 bg-opacity-70 py-3 px-5">Books</div>
                 </div>
-                
+
             </div>
 
-            
+
         </div>
 
-        <div class="px-8 py-5">
+        <div class="px-8 py-5 hidden">
             <h1 class="text-3xl">Recent Products</h1>
             <div class="grid lg:grid-cols-3 grid-cols-1">
                 @foreach ($products as $product)
@@ -55,8 +56,8 @@
                     </div>
                 </div>
                 @endforeach
-                
-                
+
+
             </div>
         </div>
     </main>

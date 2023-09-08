@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <livewire:navbar :pos="2"></livewire:navbar>    
+        <livewire:navbar :pos="2"></livewire:navbar>
     </header>
 
     <main class="w-full">
@@ -21,10 +21,10 @@
                 <div class="rounded-lg p-[5em] text-white flex flex-col items-center !bg-cover !bg-blend-overlay" style="background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') #00000060;">
                     <div class="rounded-full bg-yellow-500 bg-opacity-70 py-3 px-5">Books</div>
                 </div>
-                
+
             </div>
 
-            
+
         </div>
 
         @foreach ($categories as $category)
@@ -32,22 +32,51 @@
             <h1 class="text-3xl">{{ ucfirst($category) }}</h1>
             <div class="grid lg:grid-cols-3 grid-cols-1">
                 @foreach ($products -> where('category', null, ucfirst($category)) as $product)
-                    <div class="p-4 rounded-lg w-full">
-                        <img src="{{ $product -> image }}" class="w-full rounded-lg">
-                        <div class="flex flex-col justify-between items-center mt-3">
-                            <h1 class="text-3xl">{{ substr($product -> name, 0, 23) }}</h1>
-                            <a href="{{ $product -> link }}" class="rounded-lg bg-yellow-300 px-3 py-2 h-fit mt-3" target="_blank"> Buy Now <i class="fi fi-rr-arrow-up-right-from-square"></i></a>
+                    @if ($product -> product_type == "dropshipping")
+                        <div class="p-4 rounded-lg w-full">
+                            @if (str_contains($product -> image, '|'))
+                                <img src="{{ explode('|', $product -> image)[0] }}" class="w-full rounded-lg">
+
+                            @else
+                                <img src="{{ $product -> image }}" class="w-full rounded-lg">
+
+                            @endif
+
+                            <div class="flex flex-row justify-between items-center mt-3">
+                                <div class="flex flex-col">
+                                    <a href="{{ route('product', $product -> id)  }}" class="text-3xl">{{ substr($product -> name, 0, 23) }}</a>
+                                    <p>{{ $product -> price }}</p>
+                                </div>
+                                <form action="{{ route('add-item') }}" id="addToCart">
+                                    @csrf
+                                    <input type="hidden" name="username" value="{{ auth() -> user() -> email }}">
+                                    <input type="hidden" name="price" value="{{ $product -> price }}">
+                                    <input type="hidden" name="product_name" value="{{ $product -> name }}">
+                                    <input type="hidden" name="product_id" value="{{ $product -> id }}">
+                                    <button type="submit" href="" class="rounded-lg bg-yellow-300 px-3 py-2 h-fit"><i class="fi fi-rr-shopping-cart-add text-xl"></i></button>
+                                </form>
+                            </div>
                         </div>
-                        
-                    </div>
+
+                    @else
+                        <div class="p-4 rounded-lg w-full">
+                            <img src="{{ $product -> image }}" class="w-full rounded-lg">
+                            <div class="flex flex-col justify-between items-center mt-3">
+                                <h1 class="text-3xl">{{ substr($product -> name, 0, 23) }}</h1>
+                                <a href="{{ $product -> link }}" class="rounded-lg bg-yellow-300 px-3 py-2 h-fit mt-3" target="_blank"> Buy Now <i class="fi fi-rr-arrow-up-right-from-square"></i></a>
+                            </div>
+
+                        </div>
+
+                    @endif
                 @endforeach
             </div>
             </div>
         @endforeach
-        
 
-        
-        
+
+
+
     </main>
 
 </body>

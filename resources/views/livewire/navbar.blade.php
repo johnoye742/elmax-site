@@ -19,13 +19,13 @@
             <div class="bg-gray-100 pl-5 gap-3 py-2 flex flex-row rounded-lg">
                 <i class="fi fi-rr-search text-xl"></i>
                 <input type="search" class="bg-[#00000000] w-full" placeholder="Search">
-                
+
             </div>
-            <i class="fi fi-rr-shopping-cart text-xl"></i>
-    
-            
+            <a href="{{ route('cart') }}"><i class="fi fi-rr-shopping-cart text-xl"></i></a>
+
+
         </div>
-    
+
         <div class="lg:hidden flex flex-col justify-center">
             <i class="fi fi-br-menu-burger text-2xl" id="toggle"></i>
         </div>
@@ -36,7 +36,7 @@
         <div class="bg-transparent border border-black pl-5 gap-3 py-2 flex flex-row rounded-lg">
             <i class="fi fi-rr-search text-xl"></i>
             <input type="search" class="bg-[#00000000] w-full" placeholder="Search">
-            
+
         </div>
 
         <ul class="flex flex-col gap-5 mt-3">
@@ -46,6 +46,6 @@
             <li><a href="" class="hover:text-yellow-500">Contact Us</a></li>
         </ul>
 
-        
+
     </div>
 </div>
